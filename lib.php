@@ -34,9 +34,9 @@ require_once(dirname(__FILE__) . '/../../config.php'); //obligatorio
 function local_attendance_cron(){
 	global $DB;
 	
-	$sessionsToClose = $DB->get_records_sql('SELECT id FROM {local_attendance_session} WHERE CEIL(duration-('.$time.'-date)/60)<=0 AND open=1');
+	$sessionstoclose = $DB->get_records_sql('SELECT id FROM {local_attendance_session} WHERE CEIL(duration-('.$time.'-date)/60)<=0 AND open=1');
 	
-	foreach ($sessionsToClose as $session){
+	foreach ($sessionstoclose as $session){
 		$DB->update_record('local_attendance_session',array("id"=>$session->id,"open"=>0));
 	}	
 }
