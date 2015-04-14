@@ -63,8 +63,8 @@ if ($action=='mark_attendance'){
 	
 	$courseid = required_param('courseid',PARAM_INT);
 	$session = $DB->get_record_sql('SELECT s.id,c.fullname FROM {user} u INNER JOIN {user_enrolments} ue ON (ue.userid = u.id) INNER JOIN {enrol} e ON (e.id = ue.enrolid) INNER JOIN {course} c ON (e.courseid = c.id) INNER JOIN {local_attendance_session} s ON (c.id=s.courseid) WHERE ue.userid = '.$USER->id.' AND s.open=1 AND c.id='.$courseid);
-	$attendanceExists = $DB->record_exists("local_attendance_attendance",array('sessionid'=>$session->id,'userid'=>$USER->id));
-		if ($attendanceExists){
+	$attendanceexists = $DB->record_exists("local_attendance_attendance",array('sessionid'=>$session->id,'userid'=>$USER->id));
+		if ($attendanceexists){
 			echo '<div class="alert alert-danger">'.get_string('alreadyregistered', 'local_attendance').'</div>';
 		}
 		else{
@@ -86,8 +86,8 @@ if (empty($sessions)){
 else{
 	$n = 0;
 	foreach($sessions as $session){
-		$sessionContext = context_course::instance($session->id);
-		if(!has_capability('local/attendance:teacherview', $sessionContext)){
+		$sessioncontext = context_course::instance($session->id);
+		if(!has_capability('local/attendance:teacherview', $sessioncontext)){
 			$n++;
 		}
 	}
