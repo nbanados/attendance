@@ -33,6 +33,7 @@ require_once($CFG->dirroot.'/local/attendance/tables.php');
 
 
 global $PAGE, $CFG, $OUTPUT, $DB, $COURSE, $USER;
+
 require_login();
 
 if(!(isset($CFG->local_uai_debug) && $CFG->local_uai_debug==1)) {
