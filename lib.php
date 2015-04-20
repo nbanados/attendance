@@ -8,36 +8,35 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
+// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * 
  *
- * @package    local
+ * @package local
  * @subpackage attendance
- * @copyright  2015 Juan Pablo Baltra
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright 2015 Juan Pablo Baltra
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-//function library, automatically included with by config.php
-
-defined('MOODLE_INTERNAL') || die();
-require_once("$CFG->libdir/formslib.php");
-require_once(dirname(__FILE__) . '/../../config.php'); //obligatorio
-
-
-function local_attendance_cron(){
+// function library, automatically included with by config.php
+defined ( 'MOODLE_INTERNAL' ) || die ();
+require_once ("$CFG->libdir/formslib.php");
+require_once (dirname ( __FILE__ ) . '/../../config.php'); // obligatorio
+function local_attendance_cron() {
 	global $DB;
+	$sessionstoclose = $DB->get_records_sql ( 'SELECT id FROM {local_attendance_session} WHERE CEIL(duration-(:time-date)/60)<=0 AND open=1', array (
+			'time' => $time 
+	) );
 	
-	$sessionstoclose = $DB->get_records_sql('SELECT id FROM {local_attendance_session} WHERE CEIL(duration-(:time-date)/60)<=0 AND open=1',array('time'=> $time));
-	
-	foreach ($sessionstoclose as $session){
-		$DB->update_record('local_attendance_session',array("id"=>$session->id,"open"=>0));
-	}	
+	foreach ( $sessionstoclose as $session ) {
+		$DB->update_record ( 'local_attendance_session', array (
+				"id" => $session->id,
+				"open" => 0 
+		) );
+	}
 }
 
