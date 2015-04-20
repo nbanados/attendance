@@ -39,8 +39,8 @@ if(!(isset($CFG->local_uai_debug) && $CFG->local_uai_debug==1)) {
 }
 
 $courseid = required_param('courseid', PARAM_INT);
-$courseExists = $DB->record_exists('course', array('id'=>$courseid));
-if(!$courseExists){
+$courseexists = $DB->record_exists('course', array('id'=>$courseid));
+if(!$courseexists){
 	print_error(get_string('INVALID_ACCESS','local_attendance'));
 }
 
@@ -54,10 +54,10 @@ if(has_capability('local/attendance:teacherview', $context)){
 	print_error(get_string('INVALID_ACCESS','local_attendance'));
 }
 
-$courseName = $DB->get_record('course', array('id'=>$courseid));
+$coursename = $DB->get_record('course', array('id'=>$courseid));
 
 //breadcurmbs
-$PAGE->navbar->add($courseName->shortname,'/course/view.php?id='.$courseid);
+$PAGE->navbar->add($coursename->shortname,'/course/view.php?id='.$courseid);
 $PAGE->navbar->add(get_string('attendances', 'local_attendance'));
 $PAGE->navbar->add(get_string('record', 'local_attendance'),'/local/attendance/studentrecord.php?courseid='.$courseid);
 
@@ -65,7 +65,7 @@ $percentage = $DB->get_record_sql('SELECT ROUND(100*(SELECT count(*) FROM {local
 								  IN (SELECT s.id from {local_attendance_session} s WHERE s.courseid='.$courseid.') AND a.userid='.$USER->id.')/
 								  (SELECT count(*) FROM {local_attendance_session} s WHERE s.courseid='.$courseid.')) as total');
 
-$title = $courseName->fullname.' - '.get_string('attendancerecord', 'local_attendance').' ('.get_string('attendance','local_attendance').': '.$percentage->total.'%)';
+$title = $coursename->fullname.' - '.get_string('attendancerecord', 'local_attendance').' ('.get_string('attendance','local_attendance').': '.$percentage->total.'%)';
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
 
